@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -17,6 +19,53 @@ namespace Vidly.Controllers
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
+        }
+        public ActionResult New()
+        {
+            var membershipTypes = _context.MembershipTypes.ToList();
+            var viewModel = new CustomerFormViewModel
+            {
+                Customer = new Customer(),
+                MembershipTypes =membershipTypes
+            };
+            return View("CustomerForm",viewModel);
+        }
+        //Create: Customer
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Customer customer)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+                return View("CustomerForm",viewModel);
+
+            }
+            if (customer.Id == 0)
+                _context.Customers.Add(customer);
+            else
+            {
+                var customerDB = _context.Customers.Single(c => c.Id == customer.Id);
+                customerDB.Name = customer.Name;
+                customerDB.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+                customerDB.BirthDate = customer.BirthDate;
+                customerDB.MembershipTypeId = customer.MembershipTypeId;
+
+            }
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                Console.WriteLine(e);
+            }
+            
+            return RedirectToAction("Index","Customers");
         }
         // GET: Customers
         public ViewResult Index()
@@ -35,6 +84,18 @@ namespace Vidly.Controllers
             }
             return View(customer);
         }
-
+        //Edit Customer
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
+            if (customer==null)
+                return HttpNotFound();
+            var viewModel = new CustomerFormViewModel
+            {
+                Customer = customer,
+                MembershipTypes = _context.MembershipTypes.ToList()
+            };
+            return View("CustomerForm", viewModel);
+        }
     }
 }

@@ -9,14 +9,25 @@ namespace Vidly.Models
     public class Movie
     {
         public int Id { get; set; }
+        [Required(ErrorMessage ="please Enter the Movie Name ")]
         public string Name { get; set; }
-        [Required]
+       
          public Genre Genre { get; set; }
-         public byte GenreId { get; set; }
+        [Display(Name = "Genre")]
+
+        [Required]
+        public byte GenreId { get; set; }
+
+        [Display(Name = "Date Added")]
+
         public DateTime DateAdded { get; set; }
- 
-         public DateTime ReleaseDate { get; set; }
- 
-         public byte NumberInStock { get; set; }
+
+        [Display(Name = "Release Date")]
+        public DateTime ReleaseDate { get; set; }
+
+
+        [Display(Name = "Number In Stock")]
+        [Range(1,20)]
+        public byte NumberInStock { get; set; }
     }
 }
