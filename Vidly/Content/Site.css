@@ -2,11 +2,11 @@
     padding-top: 50px;
     padding-bottom: 20px;
 }
-.field-validation-error
+.field-validation-error,label.error
 {
     color:#ff0000;
 }
-.input-validation-error 
+.input-validation-error ,input.error
 {
     border:2px solid #ff0000;
 }
