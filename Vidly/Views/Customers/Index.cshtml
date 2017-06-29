@@ -5,7 +5,9 @@
 }
 
 <h2>Customers</h2>
-@*@Html.ActionLink("New Customer", "New", null, new { @class = "btn btn-primary" })*@
+<p>
+        @Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-primary" })
+</p>
 <table id="customers" class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -31,7 +33,7 @@
                     {
                         data: "name",
                         render: function (data,type,customer) {
-                            return "<a href='/customers/edit/" + customer.Id + "'>" + customer.name + "</a>";
+                            return "<a href='/customers/edit/" + customer.id + "'>" + customer.name + "</a>";
                         }
                     },
                     {

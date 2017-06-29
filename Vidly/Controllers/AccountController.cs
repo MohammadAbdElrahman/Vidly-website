@@ -400,10 +400,10 @@ namespace Vidly.Controllers
         }
 
         //
-        // POST: /Account/LogOff
+        // POST: /Account/Out
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult LogOut()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
